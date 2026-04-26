@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -11,21 +12,21 @@ export default function Login() {
       const res = await API.post("/auth/login", form);
 
       localStorage.setItem("token", res.data.token);
-
-      alert("Login Success");
       navigate("/products");
     } catch (err) {
-      alert(err.response?.data?.message);
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="p-6 shadow-lg rounded-lg w-80">
+      <div className="card w-80">
         <h2 className="text-xl mb-4">Login</h2>
 
+        {error && <p className="text-red-400 mb-2">{error}</p>}
+
         <input
-          className="border p-2 w-full mb-2"
+          className="input mb-2"
           placeholder="Email"
           onChange={(e) =>
             setForm({ ...form, email: e.target.value })
@@ -34,25 +35,16 @@ export default function Login() {
 
         <input
           type="password"
-          className="border p-2 w-full mb-2"
+          className="input mb-2"
           placeholder="Password"
           onChange={(e) =>
             setForm({ ...form, password: e.target.value })
           }
         />
 
-        <button
-          onClick={handleLogin}
-          className="bg-blue-500 text-white w-full p-2"
-        >
+        <button onClick={handleLogin} className="button w-full">
           Login
         </button>
-        <p
-  className="text-sm mt-2 text-blue-500 cursor-pointer"
-  onClick={() => navigate("/signup")}
->
-  Don't have an account? Signup
-</p>
       </div>
     </div>
   );
