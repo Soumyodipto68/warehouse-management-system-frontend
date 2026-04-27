@@ -11,7 +11,7 @@ export default function Login() {
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // 🔥 important
+    e.preventDefault();
 
     try {
       const res = await API.post("/auth/login", form);
@@ -23,36 +23,82 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <form onSubmit={handleSubmit} className="card w-80">
-        <h2 className="text-xl mb-4">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <div className="bg-white shadow-2xl rounded-xl w-full max-w-md p-8">
+        {/* Logo / Branding */}
+        <div className="flex justify-center mb-6">
+          <img
+            src="/logo.svg"
+            alt="Brand Logo"
+            className="h-12 w-auto"
+          />
+        </div>
 
-        {error && <p className="text-red-400 mb-2">{error}</p>}
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Welcome Back
+        </h2>
 
-        <input
-          className="input mb-2"
-          placeholder="Email"
-          type="email"
-          required
-          onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
-          }
-        />
+        {/* Error Message */}
+        {error && (
+          <p className="text-red-500 text-sm text-center mb-4">
+            {error}
+          </p>
+        )}
 
-        <input
-          className="input mb-2"
-          placeholder="Password"
-          type="password"
-          required
-          onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
-          }
-        />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              required
+              placeholder="you@example.com"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
+            />
+          </div>
 
-        <button type="submit" className="button w-full">
-          Login
-        </button>
-      </form>
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              onChange={(e) =>
+                setForm({ ...form, password: e.target.value })
+              }
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Extra Links */}
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>
+            Don’t have an account?{" "}
+            <a
+              href="/signup"
+              className="text-indigo-600 hover:underline"
+            >
+              Sign up
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

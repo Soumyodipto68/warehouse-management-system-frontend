@@ -58,39 +58,45 @@ export default function Orders() {
   };
 
   return (
-    <Layout>
-      <h1 className="text-2xl mb-4">Place Order</h1>
+    <>
+      {/* Page Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Place Order</h1>
+      </div>
 
+      {/* Status Message */}
       {message && (
-        <p className="mb-4 text-sm text-[#e5d3b3]">{message}</p>
+        <p className="mb-4 text-sm font-medium text-indigo-600">{message}</p>
       )}
 
-      <div className="grid md:grid-cols-2 gap-4">
+      {/* Product Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {products.map((p) => (
-          <div key={p.id} className="card">
-            <h2 className="font-bold">{p.name}</h2>
+          <div
+            key={p.id}
+            className="bg-white shadow-md rounded-lg p-5 hover:shadow-lg transition"
+          >
+            <h2 className="text-lg font-bold text-gray-800">{p.name}</h2>
+            <p className="text-sm text-gray-500 mt-1">{p.description}</p>
 
-            <p className="text-sm text-gray-400">
-              {p.description}
-            </p>
+            <div className="mt-4">
+              <p className="text-indigo-600 font-semibold">₹{p.price}</p>
+              <p className="text-gray-600 text-sm">Stock: {p.stock}</p>
+            </div>
 
-            <p className="mt-2">₹{p.price}</p>
-            <p>Stock: {p.stock}</p>
-
-            <div className="flex gap-2 mt-3">
+            {/* Quantity + Order Button */}
+            <div className="flex gap-2 mt-4">
               <input
                 type="number"
-                className="input w-24"
+                className="w-24 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Qty"
                 value={quantities[p.id] || ""}
-                onChange={(e) =>
-                  handleChange(p.id, e.target.value)
-                }
+                onChange={(e) => handleChange(p.id, e.target.value)}
               />
 
               <button
                 onClick={() => handleOrder(p.id)}
-                className="button"
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold transition"
               >
                 Order
               </button>
@@ -98,6 +104,6 @@ export default function Orders() {
           </div>
         ))}
       </div>
-    </Layout>
+    </>
   );
 }

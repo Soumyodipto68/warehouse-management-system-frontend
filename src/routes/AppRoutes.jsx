@@ -9,53 +9,34 @@ import Dashboard from "../pages/Dashboard";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
+import Layout from "../components/Layout";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      
+
       {/* Public */}
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      {/* Protected */}
-      <Route
-        path="/products"
-        element={
-          <ProtectedRoute>
-            <Products />
-          </ProtectedRoute>
-        }
-      />
+      {/* Protected Routes */}
+      <Route element={<ProtectedRoute />}>
 
-      <Route
-        path="/orders"
-        element={
-          <ProtectedRoute>
-            <Orders />
-          </ProtectedRoute>
-        }
-      />
+        {/* Layout wrapper */}
+        <Route element={<Layout />}>
 
-      {/* Admin */}
-      <Route
-        path="/add-product"
-        element={
-          <AdminRoute>
-            <AddProduct />
-          </AdminRoute>
-        }
-      />
+          <Route path="/products" element={<Products />} />
+          <Route path="/orders" element={<Orders />} />
 
-      <Route
-        path="/dashboard"
-        element={
-          <AdminRoute>
-            <Dashboard />
-          </AdminRoute>
-        }
-      />
-      
+          {/* Admin only */}
+          <Route element={<AdminRoute />}>
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+        </Route>
+      </Route>
+
     </Routes>
   );
 }
