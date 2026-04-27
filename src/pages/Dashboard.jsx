@@ -10,14 +10,26 @@ export default function Dashboard() {
     lowStock: [],
   });
 
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
   const fetchStats = async () => {
     try {
       const res = await API.get("/admin/dashboard");
-      setStats(res.data);
+
+      console.log("DASHBOARD DATA:", res.data);
+setStats({
+  users: res.data?.totalUsers ?? 0,
+  products: res.data?.totalProducts ?? 0,
+  orders: res.data?.totalOrders ?? 0,
+  lowStock: res.data?.lowStockProducts ?? [],
+});
+
     } catch (err) {
+      console.error("Dashboard Error:", err);
       setMessage("Failed to load dashboard");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,8 +41,14 @@ export default function Dashboard() {
     <Layout>
       <h1 className="text-2xl mb-6">Dashboard</h1>
 
+      {/* 🔄 Loading State */}
+      {loading && (
+        <p className="mb-4 text-sm text-gray-400">Loading dashboard...</p>
+      )}
+
+      {/* ❌ Error Message */}
       {message && (
-        <p className="mb-4 text-sm text-[#e5d3b3]">{message}</p>
+        <p className="mb-4 text-sm text-red-400">{message}</p>
       )}
 
       {/* 📊 Stats Cards */}
@@ -51,11 +69,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ⚠️ Low Stock */}
+      {/* ⚠️ Low Stock Section */}
       <div className="card">
         <h2 className="text-lg mb-3">Low Stock Products</h2>
 
-        {stats.lowStock.length === 0 ? (
+        {(stats.lowStock?.length ?? 0) === 0 ? (
           <p className="text-gray-400">All products are well stocked</p>
         ) : (
           stats.lowStock.map((p) => (

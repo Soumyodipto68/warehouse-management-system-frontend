@@ -1,23 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
-  const [role, setRole] = useState(null);
-
-  // 🔐 decode role from token
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setRole(payload.role);
-      } catch {
-        setRole(null);
-      }
-    }
-  }, []);
+  const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen">
@@ -25,6 +11,7 @@ export default function Layout({ children }) {
       {/* Navbar */}
       <div className="flex justify-between items-center p-4 border-b border-[#3e2a1c]">
         
+        {/* Logo */}
         <h1
           onClick={() => navigate("/products")}
           className="text-xl font-bold text-[#e5d3b3] cursor-pointer"
@@ -34,16 +21,22 @@ export default function Layout({ children }) {
 
         <div className="flex gap-3 items-center">
 
-          <button onClick={() => navigate("/products")} className="button">
+          <button
+            onClick={() => navigate("/products")}
+            className="button"
+          >
             Products
           </button>
 
-          <button onClick={() => navigate("/orders")} className="button">
+          <button
+            onClick={() => navigate("/orders")}
+            className="button"
+          >
             Orders
           </button>
 
           {/* 👑 Admin Only */}
-          {role === "admin" && (
+          {user?.role === "admin" && (
             <button
               onClick={() => navigate("/dashboard")}
               className="button"
@@ -52,10 +45,10 @@ export default function Layout({ children }) {
             </button>
           )}
 
-          {/* 🔴 Logout always last */}
+          {/* 🔴 Logout */}
           <button
             onClick={() => {
-              localStorage.removeItem("token");
+              logout();
               navigate("/");
             }}
             className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded"
