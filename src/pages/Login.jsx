@@ -2,6 +2,7 @@ import { useState } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import viteSVG from "../assets/vite.svg"
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -28,7 +29,7 @@ export default function Login() {
         {/* Logo / Branding */}
         <div className="flex justify-center mb-6">
           <img
-            src="/logo.svg"
+            src= {viteSVG}
             alt="Brand Logo"
             className="h-12 w-auto"
           />
