@@ -78,7 +78,7 @@ export default function Login() {
               }
             />
           </div>
-
+{/* 
           <div className="flex justify-between items-center text-sm">
             <a
               href="/forgot-password"
@@ -86,7 +86,7 @@ export default function Login() {
             >
               Forgot password?
             </a>
-          </div>
+          </div> */}
 
           <button
             type="submit"

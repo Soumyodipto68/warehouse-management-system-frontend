@@ -2,11 +2,10 @@ import { useState } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import viteSVG from "../assets/vite.svg"
 
 export default function Login() {
+  const [isAdmin, setIsAdmin] = useState(true);
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -17,80 +16,54 @@ export default function Login() {
     try {
       const res = await API.post("/auth/login", form);
       login(res.data.token);
-      navigate("/products");
+
+      if (isAdmin) navigate("/dashboard");
+      else navigate("/products");
+
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      alert("Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="bg-white shadow-2xl rounded-xl w-full max-w-md p-8">
-        {/* Logo / Branding */}
-        <div className="flex justify-center mb-6">
-          <img
-            src= {viteSVG}
-            alt="Brand Logo"
-            className="h-12 w-auto"
-          />
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#0f172a]">
 
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Welcome Back
-        </h2>
+      <div className="relative w-[850px] h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden">
 
-        {/* Error Message */}
-        {error && (
-          <p className="text-red-500 text-sm text-center mb-4">
-            {error}
-          </p>
-        )}
+        {/* 🔹 FORMS */}
+        <div className="absolute w-full h-full flex">
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              placeholder="you@example.com"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
-            />
-          </div>
+          {/* LEFT: CUSTOMER */}
+          <div className="w-1/2 flex flex-col justify-center items-center p-10">
+            <h2 className="text-2xl font-bold mb-4">Customer Login</h2>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              placeholder="••••••••"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
-            />
-          </div>
+            <form onSubmit={handleSubmit} className="w-full space-y-4">
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                className="w-full px-4 py-2 border rounded-lg"
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+              />
 
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            Login
-          </button>
-        </form>
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                className="w-full px-4 py-2 border rounded-lg"
+                onChange={(e) =>
+                  setForm({ ...form, password: e.target.value })
+                }
+              />
 
-        {/* Extra Links */}
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>
-            Don’t have an account?{" "}
+              <button className="w-full bg-gray-900 text-white py-2 rounded-lg">
+                Login
+              </button>
+              <div className="mt-6 text-center text-sm text-gray-500">
+            <p>
+            Don't have an account?{" "}
             <a
               href="/signup"
               className="text-indigo-600 hover:underline"
@@ -99,6 +72,82 @@ export default function Login() {
             </a>
           </p>
         </div>
+            </form>
+          </div>
+
+          {/* RIGHT: ADMIN */}
+          <div className="w-1/2 flex flex-col justify-center items-center p-10">
+            <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
+
+            <form onSubmit={handleSubmit} className="w-full space-y-4">
+              <input
+                type="email"
+                placeholder="Admin Email"
+                required
+                className="w-full px-4 py-2 border rounded-lg"
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+              />
+
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                className="w-full px-4 py-2 border rounded-lg"
+                onChange={(e) =>
+                  setForm({ ...form, password: e.target.value })
+                }
+              />
+
+              <button className="w-full bg-indigo-600 text-white py-2 rounded-lg">
+                Admin Login
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+        {/* 🔥 OVERLAY */}
+        <div
+          className={`absolute top-0 left-0 w-1/2 h-full z-10 
+          bg-gradient-to-br from-indigo-600 to-purple-700 text-white 
+          flex flex-col justify-center items-center p-10 
+          transition-all duration-500 ease-in-out
+          pointer-events-none
+          ${isAdmin ? "translate-x-full" : "translate-x-0"}`}
+        >
+          <div className="pointer-events-auto text-center">
+
+            {isAdmin ? (
+              <>
+                <h2 className="text-2xl font-bold mb-4">
+                  Are you a Admin?
+                </h2>
+                <button
+                  onClick={() => setIsAdmin(false)}
+                  className="border cursor-pointer px-6 py-2 rounded-lg hover:bg-white hover:text-black transition "
+                >
+                  Switch to Admin
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold mb-4">
+                  Login as Customer
+                </h2>
+                <button
+                  onClick={() => setIsAdmin(true)}
+                  className="border cursor-pointer px-6 py-2 rounded-lg hover:bg-white hover:text-black transition "
+                >
+                  Switch to Customer Login
+                </button>
+              </>
+            )}
+
+          </div>
+        </div>
+
       </div>
     </div>
   );
