@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import viteSVG from "../assets/vite.svg"
 
-export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+export default function Signup() {
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -13,13 +13,34 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+    };
+
+    const endpoints = ["/auth/register", "/auth/signup", "/users/register", "/users/signup"];
 
     try {
-      const res = await API.post("/auth/login", form);
-      login(res.data.token);
-      navigate("/products");
+      let lastError;
+
+      for (const endpoint of endpoints) {
+        try {
+          const res = await API.post(endpoint, payload);
+          login(res.data.token);
+          navigate("/products");
+          return;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      const backendMessage = lastError?.response?.data?.message || lastError?.response?.data?.error || "Signup failed";
+      setError(backendMessage);
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError("Signup failed");
     }
   };
 
@@ -37,7 +58,7 @@ export default function Login() {
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Welcome Back
+          Create Account
         </h2>
 
         {/* Error Message */}
@@ -49,6 +70,21 @@ export default function Login() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Full Name
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="Your name"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Email
@@ -92,7 +128,7 @@ export default function Login() {
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
           >
-            Sign UP
+            Create Account
           </button>
         </form>
 
