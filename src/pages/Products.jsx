@@ -27,7 +27,7 @@ export default function Products() {
             Manage all products in your warehouse.
           </p>
         </div>
-
+         
         <button
           onClick={() => navigate("/add-product")}
           className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition"

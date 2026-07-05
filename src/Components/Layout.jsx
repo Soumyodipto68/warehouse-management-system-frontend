@@ -63,10 +63,10 @@ export default function Layout() {
 
                 <div className="text-sm">
                   <p className="font-semibold text-slate-800">
-                    {user.name || "User"}
+                    {user?.name}
                   </p>
                   <p className="text-slate-500 capitalize">
-                    {user.role}
+                    {user?.role}
                   </p>
                 </div>
               </div>
