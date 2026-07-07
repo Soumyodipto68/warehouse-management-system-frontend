@@ -55,7 +55,7 @@ export default function Layout() {
             )}
 
             {/* User Badge */}
-            {user && (
+            {(
               <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg border">
                 <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold uppercase">
                   {user.name?.charAt(0) || "U"}

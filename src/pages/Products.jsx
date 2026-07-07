@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Products() {
+  const { user, logout } = useAuth();
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
@@ -27,13 +29,14 @@ export default function Products() {
             Manage all products in your warehouse.
           </p>
         </div>
-         
-        <button
+         { user?.role!='customer' &&
+          (<button
           onClick={() => navigate("/add-product")}
           className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition"
         >
           + Add Product
         </button>
+         )}
       </div>
 
       {/* Stats */}
