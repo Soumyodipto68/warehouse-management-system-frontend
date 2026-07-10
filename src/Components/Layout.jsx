@@ -1,5 +1,6 @@
 import { useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { FaCartArrowDown } from "react-icons/fa";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Layout() {
             className="cursor-pointer flex items-center gap-3"
           >
             <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow">
-              W
+             <FaCartArrowDown />
             </div>
 
             <div>
@@ -55,18 +56,18 @@ export default function Layout() {
             )}
 
             {/* User Badge */}
-            {(
+            {user && (
               <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg border">
                 <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold uppercase">
-                  {user.name?.charAt(0) || "U"}
+                  {(user?.name || user?.email || "User").charAt(0).toUpperCase()}
                 </div>
 
                 <div className="text-sm">
                   <p className="font-semibold text-slate-800">
-                    {user?.name}
+                    {user?.name || user?.email || "User"}
                   </p>
                   <p className="text-slate-500 capitalize">
-                    {user?.role}
+                    {user?.role || "member"}
                   </p>
                 </div>
               </div>
