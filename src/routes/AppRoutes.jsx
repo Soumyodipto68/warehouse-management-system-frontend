@@ -10,6 +10,7 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
 import Layout from "../components/Layout";
+import { ProductDetails } from "../pages/ProductDetails";
 
 export default function AppRoutes() {
   return (
@@ -27,6 +28,8 @@ export default function AppRoutes() {
 
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          
 
           {/* Admin only */}
           <Route element={<AdminRoute />}>
